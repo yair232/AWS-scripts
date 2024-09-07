@@ -1,6 +1,8 @@
 import argparse
 import boto3
 import json
+import uuid
+
 
 def EC2(type, ami):
     if ami == 'amazon':
@@ -87,6 +89,15 @@ def create_s3(sure):
         s3.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy_json)
     print("S3 bucket created successfully")
 
+def list_my_s3(bucket_name='yaircli'):
+    s3 = boto3.client('s3')
+    response = s3.list_buckets()
+    bucket_list = []
+    for bucket in response['Buckets']:
+        if bucket['Name'] == bucket_name:
+            bucket_list.append(bucket['Name'])
+    
+    return bucket_list
 
 
 def upload(file,object_name):
@@ -99,22 +110,97 @@ def upload(file,object_name):
         print(f"Error uploading file: {e}")
 
 
+def create_zone(private):
+    client = boto3.client('route53')
+    response = client.create_hosted_zone(
+        Name='yaircli.com',
+        VPC={
+            'VPCRegion': 'us-east-1',
+            'VPCId': 'vpc-08c04cf2cf7964afd'
+        },
+        CallerReference=str(uuid.uuid4()),
+        HostedZoneConfig={
+            'Comment': 'Created by cli',
+            'PrivateZone': private
+        }
+    ) 
+    hosted_zone_id = response['HostedZone']['Id'].split('/')[-1]
+    tag_response = client.change_tags_for_resource(
+        ResourceType='hostedzone',
+        ResourceId=hosted_zone_id,
+        AddTags=[
+            {
+                'Key': 'name',
+                'Value': 'yaircli'
+            }
+        ]
+    )
+def get_hosted_zone_id():
+    client = boto3.client('route53')
+    zone_name= 'yaircli.com'
+    # List all hosted zones
+    response = client.list_hosted_zones()
+    
+    # Iterate through the hosted zones
+    for zone in response['HostedZones']:
+        if zone['Name'].rstrip('.') == zone_name:
+            return zone['Id'].split('/')[-1]  # Extract the hosted zone ID from the ARN
+    
+
+def create_dns_record(record_name, record_type, record_values, ttl=300):
+    client = boto3.client('route53')
+    
+    # Retrieve the hosted zone ID
+    hosted_zone_id = get_hosted_zone_id()
+    if not hosted_zone_id:
+        print("Hosted zone not found.")
+        return
+    
+    if isinstance(record_values, str):
+        record_values = [value.strip() for value in record_values.split(',')]
+    
+    # Prepare the record set change request
+    change_batch = {
+        'Changes': [
+            {
+                'Action': 'CREATE',
+                'ResourceRecordSet': {
+                    'Name': record_name,
+                    'Type': record_type,
+                    'TTL': ttl,
+                    'ResourceRecords': [{'Value': value} for value in record_values],
+                }
+            }
+        ]
+    }
+    
+    
+    # Create the DNS record
+    response = client.change_resource_record_sets(
+        HostedZoneId=hosted_zone_id,
+        ChangeBatch=change_batch
+    )
+    
+    print(f"Record creation successful")
+
 def main():
     parser = argparse.ArgumentParser(description='Manage AWS resources.')
     parser.add_argument('-r', '--resource', required=True, choices=['ec2', 's3', 'route53'],
                         help='Type of AWS resource to manage.')
-    parser.add_argument('-a', '--action', required=True, choices=['create', 'manage', 'list','upload'],
+    parser.add_argument('-a', '--action', required=True, choices=['create', 'manage', 'list'],
                         help='Action to perform on the specified resource.')
-    parser.add_argument('-t', '--type', choices=['t2.nano', 't4g.nano'],
-                        help='Type of EC2 instance (required for EC2 create action).')
+    parser.add_argument('-t', '--type', choices=['t2.nano', 't4g.nano','A', 'CNAME', 'MX', 'TXT'],
+                        help='Type of EC2 instance (required for EC2 create action)/Type of DNS record.')
     parser.add_argument('-i', '--image', '--ami', choices=['ubuntu', 'amazon'],
                         help='Image for EC2 instance (required for EC2 create action).')
     parser.add_argument( '--status', choices=['start', 'stop'],
                         help='Specify whether to start or stop the EC2 instance.')
     parser.add_argument('--choice', choices=['public', 'private'],
                         help='choice between public and private access.')
-    parser.add_argument('--file', help='Path to the file you want to upload')
-    parser.add_argument('--name', help='give a name for the file')
+    parser.add_argument('--file', '--upload', help='Path to the file you want to upload')
+    parser.add_argument('--name', help='give a name for the file/dns record name')
+    parser.add_argument('--values', help='Comma-separated values for the DNS record')
+    parser.add_argument('--ttl', type=int, default=300, help='Time-to-live for the DNS record')
     args = parser.parse_args()
     if args.resource == 'ec2':
         if args.action == 'create':
@@ -131,7 +217,8 @@ def main():
         elif args.action == 'list':
             list_id = list_my_ec2()
             print(list_id)
-            
+
+
     if args.resource == 's3':
         if args.action == 'create':
             if not args.choice:
@@ -142,10 +229,29 @@ def main():
                     create_s3(sure)
             else:
                 create_s3(sure='no')
-        elif args.action == 'upload':
+        elif args.action == 'manage':
             if args.file == '' or not args.name:
                 parser.error("The --file argument cannot be an empty string and --name are required.")
             upload(args.file,args.name)
+        elif args.action == 'list':
+            s3_list = list_my_s3()
+            if not s3_list:
+                print("Their is no list that asosiaet for you")
+            else:
+                print(s3_list)
+
+    if args.resource == 'route53':
+        if args.action == 'create':
+            if not args.choice:
+                parser.error("--choice isr required for creating route53")
+            if args.choice == 'public':
+                create_zone(private=False)
+            else:
+                create_zone(private=True)
+        if args.action == 'manage':
+            if (not args.name) or (not args.type) or (not args.values) or (not args.ttl):
+                parser.error("The --name --type --values --ttl cannot be empty while create record.")
+            create_dns_record(args.name,args.type,args.values,args.ttl)
 
 
 
