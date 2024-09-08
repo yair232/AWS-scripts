@@ -3,7 +3,9 @@ from ec2_manegment import *
 from s3_manegment import *
 from route53_manegment import *
 
+
 def main():
+    # Define required and optional arguments for the script
     parser = argparse.ArgumentParser(description='Manage AWS resources.')
     parser.add_argument('-r', '--resource', required=True, choices=['ec2', 's3', 'route53'],
                         help='Type of AWS resource to manage.')
@@ -24,12 +26,15 @@ def main():
     parser.add_argument('--ttl', type=int, default=300, help='Time-to-live for the DNS record')
     parser.add_argument('--Function', '--function', choices=['create','delete'], help=('the --function is required for create or delete records'))
     args = parser.parse_args()
+    # EC2 resource management
     if args.resource == 'ec2':
         if args.action == 'create':
+            # Validate presence of all necessary parameters for EC2 instance creation
             if not args.type or not args.image:
                 parser.error("--type and --image are required for creating EC2 instance")
             EC2(args.type, args.image)
         elif args.action == 'manage':
+            # Ensure all necessary parameters for managing EC2 instances are provided
             if not args.status or not args.instance:
                 parser.error("--status and --instance are requierd for the manage EC2 instance")
             if args.status == 'stop':
@@ -37,39 +42,46 @@ def main():
             elif args.status == 'start':
                 start_ec2_instance(args.instance)
         elif args.action == 'list':
+            # List all EC2 instances
             list_id = list_my_ec2()
             print(list_id)
 
-
+# S3 resource management
     if args.resource == 's3':
         if args.action == 'create':
             if not args.choice:
+                # Validate presence of all necessary parameters for s3 bucket creation
                 parser.error("--choice is required for creating s3 bucket")
             if args.choice == 'public':
-                sure = input("are you sure?")
+            # Confirm with the user before creating a public S3 bucket
+                sure = input("are you sure?") 
                 if sure == 'yes':
                     create_s3(sure)
             else:
                 create_s3(sure='no')
         elif args.action == 'manage':
+        # Validate presence of file path and name for managing S3
             if args.file == '' or not args.name:
                 parser.error("The --file argument cannot be an empty string and --name are required.")
             upload(args.file,args.name)
         elif args.action == 'list':
+            # List all S3 buckets
             s3_list = list_my_s3()
             if not s3_list:
                 print("Their is no list that asosiaet for you")
             else:
                 print(s3_list)
-
+# Route53 resource management
     if args.resource == 'route53':
         if args.action == 'create':
+            # Validate presence of choice parameter for creating Route53 zone
             if not args.choice:
                 parser.error("--choice is required for creating route53")
             if args.choice == 'public':
                 create_zone(args.name,private=False,)
             else:
                 create_zone(private=True)
+            # Ensure all necessary parameters for managing Route53 records are provided
         if args.action == 'manage':
             if (not args.name) or (not args.type) or (not args.values) or (not args.ttl) or (not args.Function):
                 parser.error("The --name --type --values --ttl cannot be empty while create record.")
