@@ -24,7 +24,8 @@ def main():
     parser.add_argument('--name', help='give a name for the file/dns record name')
     parser.add_argument('--values', help='Comma-separated values for the DNS record')
     parser.add_argument('--ttl', type=int, default=300, help='Time-to-live for the DNS record')
-    parser.add_argument('--Function', '--function', choices=['create','delete'], help=('the --function is required for create or delete records'))
+    parser.add_argument('--Function', '--function', choices=['create','delete','update'], help=('the --function is required for create or delete records'))
+    parser.add_argument('--zone_name', help=('Specify the name of the DNS zone where you want to create or delete records'))
     args = parser.parse_args()
     # EC2 resource management
     if args.resource == 'ec2':
@@ -80,11 +81,22 @@ def main():
             if args.choice == 'public':
                 create_zone(args.name,private=False,)
             else:
-                create_zone(private=True)
+                create_zone(args.name,private=True)
             # Ensure all necessary parameters for managing Route53 records are provided
         if args.action == 'manage':
-            if (not args.name) or (not args.type) or (not args.values) or (not args.ttl) or (not args.Function):
-                parser.error("The --name --type --values --ttl cannot be empty while create record.")
-            create_dns_record(args.name,args.type,args.values,args.ttl,args.function)
+            if args.Function == 'update':
+                if (not args.name) and (not args.zone_name):
+                    parser.error("the --name and --zone_name are required for update the record")
+                if not args.type:
+                    parser.error("Record type must be specified for update operations.")
+                if  (not args.values) and (not args.ttl):
+                    parser.error(" --values or --ttl are required to update")
+                create_dns_record(args.name,args.type,args.values,args.Function,args.zone_name,args.ttl)
+                    
+            if (not args.name) or (not args.type) or (not args.values) or (not args.ttl) or (not args.Function) or (not args.zone_name):
+                parser.error("The --name --type --values --ttl --zone_name cannot be empty while create/delete record.")
+            create_dns_record(args.name,args.type,args.values,args.Function,args.zone_name,args.ttl)
+        if args.action == 'list':
+            parser.error("list are not provided for route 53")
 
 main()
