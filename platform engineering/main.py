@@ -87,8 +87,6 @@ def main():
             if args.Function == 'update':
                 if (not args.name) and (not args.zone_name):
                     parser.error("the --name and --zone_name are required for update the record")
-                if not args.type:
-                    parser.error("Record type must be specified for update operations.")
                 if  (not args.values) and (not args.ttl):
                     parser.error(" --values or --ttl are required to update")
                 create_dns_record(args.name,args.type,args.values,args.Function,args.zone_name,args.ttl)
@@ -97,6 +95,8 @@ def main():
                 parser.error("The --name --type --values --ttl --zone_name cannot be empty while create/delete record.")
             create_dns_record(args.name,args.type,args.values,args.Function,args.zone_name,args.ttl)
         if args.action == 'list':
-            parser.error("list are not provided for route 53")
+            zone_list = list_hosted_zones_with_comment()
+            print(zone_list)
+            # parser.error("list are not provided for route 53")
 
 main()
