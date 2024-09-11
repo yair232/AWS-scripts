@@ -97,5 +97,6 @@ def main():
         if args.action == 'list':
             zone_list = list_hosted_zones_with_comment()
             print(zone_list)
+            
 
 main()

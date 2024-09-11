@@ -4,7 +4,7 @@ import uuid
 def create_zone(name, private):
     client = boto3.client('route53')
     if name is None:
-        name = 'yaircli.com'  # Default to 'yaircli.com'
+        name = 'yaircli.com'  # Default to 'yaircli.com
     response = client.create_hosted_zone(
         Name=name,
         VPC={
