@@ -19,7 +19,7 @@ stages {
                         def command = "python3 platform_engineering/main.py --resource s3 --action ${action}"
 
                         if (action == 'create'){
-                            command += " --choise ${security}"
+                            command += " --choice ${security}"
                         } else if (action == 'manage') {
                             command = "python3 platform_engineering/main.py --file ${file_path} --name ${file_name}"
                         }
