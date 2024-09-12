@@ -11,9 +11,10 @@ stages {
                             command += " --type ${type} --image ${image}"
                         } else if (action == 'manage') {
                             command = "python3 main.py --resource ec2 --action manage --status ${type} --instance ${spesiific_ids}"
-                } 
-                        } 
+                            } 
+                        
                         sh command
+                    }
                     }
                 }
             }
