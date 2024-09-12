@@ -6,7 +6,7 @@ def EC2(type, ami):
         ami = 'ami-0e86e20dae9224db8'
     instances = []
     # create a new EC2 client
-    ec2 = boto3.resource('ec2')
+    ec2 = boto3.resource('ec2', 'us-east-1')
     response = ec2.create_instances(
         ImageId= ami,
         InstanceType= type,
@@ -32,7 +32,7 @@ def get_instance_name_tag(instance):
             return True
 
 def stop_ec2_instance(all):
-    client = boto3.client('ec2')
+    client = boto3.client('ec2', 'us-east-1')
     # Retrieve a list of EC2 instances with the 'yair-CLI' tag
     id_list = list_my_ec2()
     # Check if the 'all' parameter is 'all' or a specific instance ID
@@ -54,7 +54,7 @@ def stop_ec2_instance(all):
             print("I stop the instance", all)
 
 def list_my_ec2():
-    client = boto3.client('ec2')
+    client = boto3.client('ec2', 'us-east-1')
     resp = client.describe_instances()
     id_list = {}
     for reservation in resp['Reservations']:
@@ -67,7 +67,7 @@ def list_my_ec2():
     return id_list
 
 def start_ec2_instance(all):
-    client = boto3.client('ec2')
+    client = boto3.client('ec2', 'us-east-1')
     id_list = list_my_ec2()
     if all == 'all':
         instance_ids = list(id_list.keys())

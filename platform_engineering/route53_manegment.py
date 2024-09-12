@@ -2,7 +2,7 @@ import boto3
 import uuid
 
 def create_zone(name, private):
-    client = boto3.client('route53')
+    client = boto3.client('route53', 'us-east-1')
     if name is None:
         name = 'yaircli.com'  # Default to 'yaircli.com
     response = client.create_hosted_zone(
@@ -30,7 +30,7 @@ def create_zone(name, private):
     )
 
 def get_hosted_zone_id(zone_name):
-    client = boto3.client('route53')
+    client = boto3.client('route53', 'us-east-1')
     response = client.list_hosted_zones()
     
     for zone in response['HostedZones']:
@@ -40,7 +40,7 @@ def get_hosted_zone_id(zone_name):
     return None
 
 def create_dns_record(record_name, record_type, record_values, function, zone_name, ttl=300):
-    client = boto3.client('route53')
+    client = boto3.client('route53', 'us-east-1')
     hosted_zone_id = get_hosted_zone_id(zone_name)
     if not hosted_zone_id:
         print("Hosted zone not found.")
@@ -133,7 +133,7 @@ def create_dns_record(record_name, record_type, record_values, function, zone_na
         print(f"Failed to {function} record: {e}")
 
 def get_existing_record_by_name(record_name, hosted_zone_id):
-    client = boto3.client('route53')
+    client = boto3.client('route53', 'us-east-1')
     response = client.list_resource_record_sets(HostedZoneId=hosted_zone_id)
     
     for record in response['ResourceRecordSets']:
@@ -146,7 +146,7 @@ def get_existing_record_by_name(record_name, hosted_zone_id):
 def list_hosted_zones_with_comment():
     target_key = 'name'
     target_value = 'yaircli'
-    client = boto3.client('route53')
+    client = boto3.client('route53', 'us-east-1')
 
     # List all hosted zones
     response = client.list_hosted_zones()
