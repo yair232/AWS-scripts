@@ -5,10 +5,10 @@ stages {
             steps {
                 script {
                     if (resource == ec2){
-                        def command = "python3 main.py --resource ec2 --action ${ACTION}"
+                        def command = "python3 main.py --resource ec2 --action ${action}"
 
                         if (action == 'create') {
-                            command += " --type ${Type} --image ${image}"
+                            command += " --type ${type} --image ${image}"
                         } else if (action == 'manage') {
                 command = "python3 main.py --resource ec2 --action manage --status ${type} --instance ${spesiific_ids}"
                 } 
