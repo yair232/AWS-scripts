@@ -4,7 +4,7 @@ stages {
         stage('Run Python Script') {
             steps {
                 script {
-                    if (resource == ec2){
+                    if (resource == 'ec2'){
                         def command = "python3 main.py --resource ec2 --action ${action}"
 
                         if (action == 'create') {
