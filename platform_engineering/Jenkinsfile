@@ -21,7 +21,7 @@ stages {
                         if (action == 'create'){
                             command += " --choice ${security}"
                         } else if (action == 'manage') {
-                            command = "python3 platform_engineering/main.py --file ${file_path} --name ${file_name}"
+                            command += "python3 platform_engineering/main.py --resource s3 --action manage --file ${file_path} --name ${file_name}"
                         }
                         
                         sh command
