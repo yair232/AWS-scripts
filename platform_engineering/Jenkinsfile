@@ -14,8 +14,8 @@ stages {
                             } 
                         
                         sh command
-                        }
-                    if (resource == 's3'){
+                        
+                    } else if (resource == 's3'){
                         def command = "python3 platform_engineering/main.py --resource s3 --action ${action}"
 
                         if (action == 'create'){
