@@ -1,25 +1,32 @@
 pipeline {
     agent any
-stages {
+
+    environment {
+        AWS_REGION = 'us-east-1'  // Set your AWS region here
+    }
+
+    stages {
         stage('Run Python Script') {
             steps {
                 script {
-                    if (resource == 'ec2'){
+                    if (resource == 'ec2') {
                         def command = "python3 platform_engineering/main.py --resource ec2 --action ${action}"
 
                         if (action == 'create') {
                             command += " --type ${type} --image ${image}"
                         } else if (action == 'manage') {
-                            command = "python3  platform_engineering/main.py --resource ec2 --action manage --status ${type} --instance ${spesiific_ids}"
-                            } 
-                        
+                            command = "python3 platform_engineering/main.py --resource ec2 --action manage --status ${type} --instance ${specific_ids}"
+                        }
+
+                        // Add AWS region to the command if needed
+                        command += " --region ${AWS_REGION}"
+
                         sh command
-                    }
                     }
                 }
             }
         }
-
+    }
 
     post {
         always {
