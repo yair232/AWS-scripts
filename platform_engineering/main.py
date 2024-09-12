@@ -84,19 +84,20 @@ def main():
                 create_zone(args.name,private=True)
             # Ensure all necessary parameters for managing Route53 records are provided
         if args.action == 'manage':
-            if args.Function == 'update':
+            if args.Function == 'update' or args.Function == 'delete':
                 if (not args.name) and (not args.zone_name):
                     parser.error("the --name and --zone_name are required for update the record")
                 if  (not args.values) and (not args.ttl):
                     parser.error(" --values or --ttl are required to update")
                 create_dns_record(args.name,args.type,args.values,args.Function,args.zone_name,args.ttl)
                     
-            if (not args.name) or (not args.type) or (not args.values) or (not args.ttl) or (not args.Function) or (not args.zone_name):
-                parser.error("The --name --type --values --ttl --zone_name cannot be empty while create/delete record.")
-            create_dns_record(args.name,args.type,args.values,args.Function,args.zone_name,args.ttl)
-        if args.action == 'list':
-            zone_list = list_hosted_zones_with_comment()
-            print(zone_list)
+            else:
+                if (not args.name) or (not args.type) or (not args.values) or (not args.ttl) or (not args.Function) or (not args.zone_name):
+                    parser.error("The --name --type --values --ttl --zone_name cannot be empty while create/delete record.")
+                create_dns_record(args.name,args.type,args.values,args.Function,args.zone_name,args.ttl)
+            if args.action == 'list':
+                zone_list = list_hosted_zones_with_comment()
+                print(zone_list)
             
 
 main()
