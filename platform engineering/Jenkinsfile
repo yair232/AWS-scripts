@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+stages {
+        stage('Run Python Script') {
+            steps {
+                script {
+                    if (resource == ec2){
+                        def command = "python3 main.py --resource ec2 --action ${ACTION}"
+
+                        if (action == 'create') {
+                            command += " --type ${Type} --image ${image}"
+                        } else if (action == 'manage') {
+                command = "python3 main.py --resource ec2 --action manage --status ${type} --instance ${spesiific_ids}"
+                } 
+                        } 
+                        sh command
+                    }
+                }
+            }
+        }
+}
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+    }
