@@ -95,9 +95,9 @@ def main():
                 if (not args.name) or (not args.type) or (not args.values) or (not args.ttl) or (not args.Function) or (not args.zone_name):
                     parser.error("The --name --type --values --ttl --zone_name cannot be empty while create/delete record.")
                 create_dns_record(args.name,args.type,args.values,args.Function,args.zone_name,args.ttl)
-            if args.action == 'list':
-                zone_list = list_hosted_zones_with_comment()
-                print(zone_list)
+        if args.action == 'list':
+            zone_list = list_hosted_zones_with_comment()
+            print(zone_list)
             
 
 main()
