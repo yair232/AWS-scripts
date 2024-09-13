@@ -29,7 +29,7 @@ stages {
                     } else if (resource == 'route53'){
                         def command = "python3 platform_engineering/main.py --resource route53 --action ${action}"
                         if (action == 'create'){
-                            command += " --name ${name} --choice ${secuirty}"
+                            command += " --name ${zone_name} --choice ${secuirty}"
                         } else if (action == 'manage'){
                             command += "--name ${name} --type ${type} --values ${values} --ttl ${ttl} --Function ${security} --zone_name ${zone_name}"
                         }
