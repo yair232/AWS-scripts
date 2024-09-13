@@ -17,7 +17,7 @@ def main():
                         help='Image for EC2 instance (required for EC2 create action).')
     parser.add_argument( '--status', choices=['start', 'stop'],
                         help='Specify whether to start or stop the EC2 instance.')
-    parser.add_argument('--instance', help='which instance you whant to start or stop(id)/if you whant all type all.')
+    parser.add_argument('--instance', help='which instance you whant to start or stop(id)/if you want all type all.')
     parser.add_argument('--choice', choices=['public', 'private'],
                         help='choice between public and private access.')
     parser.add_argument('--file', '--upload', help='Path to the file you want to upload')
