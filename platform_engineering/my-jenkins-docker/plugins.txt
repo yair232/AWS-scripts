@@ -1,3 +1,0 @@
-parameterized-trigger:2.46
-pipeline-model-definition:1.8.4
-git:4.7.1
