@@ -1,0 +1,188 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1436.vfa_244484591f">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2214.vb_b_34b_2ea_9b_83"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2214.vb_b_34b_2ea_9b_83">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>resource</name>
+          <description>chose the resource</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>route53</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <org.biouno.unochoice.CascadeChoiceParameter plugin="uno-choice@2.8.3">
+          <name>action</name>
+          <description>chose the action that you want to perform</description>
+          <randomName>choice-parameter-5837565860895</randomName>
+          <visibleItemCount>3</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1358.vb_26663c13537">
+              <script>if (resource == &apos;route53&apos;) {
+    return [&apos;create&apos;, &apos;manage&apos;, &apos;list&apos;]
+}
+return []</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1358.vb_26663c13537">
+              <script></script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>aws_route5.3</projectName>
+          <projectFullName>aws_route5.3</projectFullName>
+          <parameters class="linked-hash-map">
+            <entry>
+              <string>resource</string>
+              <string>route53</string>
+            </entry>
+          </parameters>
+          <referencedParameters>resource</referencedParameters>
+          <choiceType>PT_SINGLE_SELECT</choiceType>
+          <filterable>false</filterable>
+          <filterLength>1</filterLength>
+        </org.biouno.unochoice.CascadeChoiceParameter>
+        <org.biouno.unochoice.CascadeChoiceParameter plugin="uno-choice@2.8.3">
+          <name>secuirty</name>
+          <description>create: chose the secuirty-type
+manage: chose if to update, create and delete records
+list: to list all :)</description>
+          <randomName>choice-parameter-5837568037315</randomName>
+          <visibleItemCount>2</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1358.vb_26663c13537">
+              <script>if (resource == &apos;route53&apos;) {
+    if (action == &apos;create&apos;) {
+        return [&apos;private&apos;, &apos;public&apos;]
+    } else if (action == &apos;manage&apos;) {
+        return [&apos;update&apos;, &apos;create&apos;,&apos;delete&apos;]
+    } else if (action == &apos;list&apos;) {
+        return [&apos;List All zone&apos;]
+    } else {
+        return [] // In case action does not match any of the expected values
+    }
+}
+return [] // Return empty list if resource is not &apos;ec2&apos;</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1358.vb_26663c13537">
+              <script></script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>aws_route5.3</projectName>
+          <projectFullName>aws_route5.3</projectFullName>
+          <parameters class="linked-hash-map">
+            <entry>
+              <string>resource</string>
+              <string>route53</string>
+            </entry>
+            <entry>
+              <string>action</string>
+              <string>create</string>
+            </entry>
+          </parameters>
+          <referencedParameters>resource, action</referencedParameters>
+          <choiceType>PT_SINGLE_SELECT</choiceType>
+          <filterable>false</filterable>
+          <filterLength>1</filterLength>
+        </org.biouno.unochoice.CascadeChoiceParameter>
+        <hudson.model.StringParameterDefinition>
+          <name>zone_name</name>
+          <description>enter the zone_name</description>
+          <defaultValue>None</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>name</name>
+          <description>enter the record name</description>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <org.biouno.unochoice.CascadeChoiceParameter plugin="uno-choice@2.8.3">
+          <name>type</name>
+          <description>chose the type of the record</description>
+          <randomName>choice-parameter-5837569781866</randomName>
+          <visibleItemCount>0</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1358.vb_26663c13537">
+              <script>if (resource == &apos;route53&apos; &amp;&amp; action == &apos;manage&apos; &amp;&amp; (secuirty== &apos;create&apos; || secuirty== &apos;update&apos;)) {
+    return [&apos;A&apos;, &apos;CNAME&apos;, &apos;MX&apos;, &apos;TXT&apos;]
+}
+return []
+</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1358.vb_26663c13537">
+              <script></script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>aws_route5.3</projectName>
+          <projectFullName>aws_route5.3</projectFullName>
+          <parameters class="linked-hash-map">
+            <entry>
+              <string>resource</string>
+              <string>route53</string>
+            </entry>
+            <entry>
+              <string>action</string>
+              <string>create</string>
+            </entry>
+            <entry>
+              <string>secuirty</string>
+              <string>private</string>
+            </entry>
+          </parameters>
+          <referencedParameters>resource, action, secuirty</referencedParameters>
+          <choiceType>PT_SINGLE_SELECT</choiceType>
+          <filterable>false</filterable>
+          <filterLength>1</filterLength>
+        </org.biouno.unochoice.CascadeChoiceParameter>
+        <hudson.model.StringParameterDefinition>
+          <name>values</name>
+          <description>enter the value for the record</description>
+          <defaultValue>0.0.0.0</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ttl</name>
+          <description>enter the ttl for the record (int)</description>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@3961.ve48ee2c44a_b_3">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@5.4.1">
+      <configVersion>2</configVersion>
+      <userRemoteConfigs>
+        <hudson.plugins.git.UserRemoteConfig>
+          <url>https://github.com/yair232/AWS-scripts</url>
+        </hudson.plugins.git.UserRemoteConfig>
+      </userRemoteConfigs>
+      <branches>
+        <hudson.plugins.git.BranchSpec>
+          <name>*/main</name>
+        </hudson.plugins.git.BranchSpec>
+      </branches>
+      <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+      <submoduleCfg class="empty-list"/>
+      <extensions/>
+    </scm>
+    <scriptPath>platform_engineering/Jenkinsfile</scriptPath>
+    <lightweight>true</lightweight>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>

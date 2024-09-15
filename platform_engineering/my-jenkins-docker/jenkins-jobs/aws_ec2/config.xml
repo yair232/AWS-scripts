@@ -1,0 +1,142 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1436.vfa_244484591f">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2214.vb_b_34b_2ea_9b_83"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2214.vb_b_34b_2ea_9b_83">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>resource</name>
+          <description>chose the resource</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>ec2</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <org.biouno.unochoice.CascadeChoiceParameter plugin="uno-choice@2.8.3">
+          <name>action</name>
+          <description>chose the action that you want to perform</description>
+          <randomName>choice-parameter-9956629213499</randomName>
+          <visibleItemCount>1</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1358.vb_26663c13537">
+              <script>if (resource == &apos;ec2&apos;) {
+    return [&apos;create&apos;, &apos;manage&apos;, &apos;list&apos;]
+}
+return []</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1358.vb_26663c13537">
+              <script></script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>aws</projectName>
+          <projectFullName>aws</projectFullName>
+          <parameters class="linked-hash-map"/>
+          <referencedParameters>resource</referencedParameters>
+          <choiceType>PT_SINGLE_SELECT</choiceType>
+          <filterable>false</filterable>
+          <filterLength>1</filterLength>
+        </org.biouno.unochoice.CascadeChoiceParameter>
+        <org.biouno.unochoice.CascadeChoiceParameter plugin="uno-choice@2.8.3">
+          <name>type</name>
+          <randomName>choice-parameter-9956629728285</randomName>
+          <visibleItemCount>1</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1358.vb_26663c13537">
+              <script>if (resource == &apos;ec2&apos;) {
+    if (action == &apos;create&apos;) {
+        return [&apos;t2.nano&apos;, &apos;t4g.nano&apos;]
+    } else if (action == &apos;manage&apos;) {
+        return [&apos;start&apos;, &apos;stop&apos;]
+    } else if (action == &apos;list&apos;) {
+        return [&apos;List All Instances&apos;]
+    } else {
+        return [] // In case action does not match any of the expected values
+    }
+}
+return [] // Return empty list if resource is not &apos;ec2&apos;</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1358.vb_26663c13537">
+              <script></script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>aws</projectName>
+          <projectFullName>aws</projectFullName>
+          <parameters class="linked-hash-map"/>
+          <referencedParameters>resource , action</referencedParameters>
+          <choiceType>PT_SINGLE_SELECT</choiceType>
+          <filterable>false</filterable>
+          <filterLength>1</filterLength>
+        </org.biouno.unochoice.CascadeChoiceParameter>
+        <org.biouno.unochoice.CascadeChoiceParameter plugin="uno-choice@2.8.3">
+          <name>image</name>
+          <description>chose the image for the instance</description>
+          <randomName>choice-parameter-9956638578392</randomName>
+          <visibleItemCount>1</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1358.vb_26663c13537">
+              <script>if (resource == &apos;ec2&apos; &amp;&amp; action == &apos;create&apos;) {
+    return [&apos;ubuntu&apos;, &apos;amazon&apos;]
+}
+return []
+</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1358.vb_26663c13537">
+              <script></script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>aws</projectName>
+          <projectFullName>aws</projectFullName>
+          <parameters class="linked-hash-map"/>
+          <referencedParameters>resource , action, type</referencedParameters>
+          <choiceType>PT_SINGLE_SELECT</choiceType>
+          <filterable>false</filterable>
+          <filterLength>1</filterLength>
+        </org.biouno.unochoice.CascadeChoiceParameter>
+        <hudson.model.StringParameterDefinition>
+          <name>spesiific_ids</name>
+          <description>Enter instance ID/all to all instances</description>
+          <defaultValue>all</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@3961.ve48ee2c44a_b_3">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@5.4.1">
+      <configVersion>2</configVersion>
+      <userRemoteConfigs>
+        <hudson.plugins.git.UserRemoteConfig>
+          <url>https://github.com/yair232/AWS-scripts</url>
+        </hudson.plugins.git.UserRemoteConfig>
+      </userRemoteConfigs>
+      <branches>
+        <hudson.plugins.git.BranchSpec>
+          <name>*/main</name>
+        </hudson.plugins.git.BranchSpec>
+      </branches>
+      <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+      <submoduleCfg class="empty-list"/>
+      <extensions/>
+    </scm>
+    <scriptPath>platform_engineering/Jenkinsfile</scriptPath>
+    <lightweight>true</lightweight>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
