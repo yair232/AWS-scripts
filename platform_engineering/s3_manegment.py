@@ -21,6 +21,7 @@ def create_s3(sure):
         s3 = boto3.client('s3')
         s3.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy_json)
     print("S3 bucket created successfully")
+    return("S3 bucket created successfully")
 
 
     
@@ -40,5 +41,7 @@ def upload(file,object_name):
     try:
         s3.upload_file(file, bucket_name, object_name)
         print(f"File '{file}' uploaded to '{bucket_name}/{object_name}'")
+        return (f"File '{file}' uploaded to '{bucket_name}/{object_name}'")
     except Exception as e:
         print(f"Error uploading file: {e}")
+        return f"Error uploading file: {e}",400

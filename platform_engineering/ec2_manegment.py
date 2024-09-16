@@ -23,7 +23,7 @@ def EC2(type, ami):
     print("Instance ID:", response.id)
     instances.append(response)
     
-    return instances
+    return str(instances)
 #check if the name start with yair
 def get_instance_name_tag(instance):
     tags = instance.get('Tags', [])
@@ -31,27 +31,31 @@ def get_instance_name_tag(instance):
         if tag['Key'] == 'Name' and tag['Value'].startswith('yair-CLI'):
             return True
 
-def stop_ec2_instance(all):
+def stop_ec2_instance(instance_id):
     client = boto3.client('ec2', 'us-east-1')
     # Retrieve a list of EC2 instances with the 'yair-CLI' tag
     id_list = list_my_ec2()
     # Check if the 'all' parameter is 'all' or a specific instance ID
-    if all == 'all':
+    if instance_id == 'all':
         instance_ids = list(id_list.keys())
         # If there are instances to stop, stop them; otherwise, notify that there are no instances
         if(len(instance_ids) != 0):
-            client.stop_instances(InstanceIds=(instance_ids))
+            client.stop_instances(InstanceIds=instance_ids)
             print("I stop the instance that you create")
+            return "I stop the instance that you create"
         else:
             print("no instance to stop")
+            return "no instance to stop",400
     else:
     # Check if the specified instance ID is in the list of instances with the 'yair-CLI' tag
-        if all not in id_list:
+        if instance_id not in id_list:
             print("eror the id of the instance is not yours")
+            return "eror the id of the instance is not yours",400
         else:
             # Stop the specified instance
-            client.stop_instances(InstanceIds=(all))
+            client.stop_instances(InstanceIds=[instance_id])
             print("I stop the instance", all)
+            return f"I stop the instance {instance_id}"
 
 def list_my_ec2():
     client = boto3.client('ec2', 'us-east-1')
@@ -64,6 +68,7 @@ def list_my_ec2():
             # Add the instance ID and its state to the dictionary    
                 id_list[instance['InstanceId']] = instance['State']['Name']  
 # Return the dictionary of instance IDs and their states
+    print(id_list)
     return id_list
 
 def start_ec2_instance(all):
@@ -74,11 +79,15 @@ def start_ec2_instance(all):
         if(len(instance_ids) != 0):
             client.start_instances(InstanceIds=(instance_ids))
             print("I start the instance that you create")
+            return("I start the instance that you create")
         else:
             print("no instance to start")
+            return("no instance to start"),400
     else:
         if all not in id_list:
             print("eror the id of the instance is not yours")
+            return("eror the id of the instance is not yours"),400
         else:
             client.start_instances(InstanceIds=(all))
             print("I start the instance", all)
+            return("I start the instance", all)

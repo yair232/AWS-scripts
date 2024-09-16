@@ -18,8 +18,8 @@ def main():
     parser.add_argument( '--status', choices=['start', 'stop'],
                         help='Specify whether to start or stop the EC2 instance.')
     parser.add_argument('--instance', help='which instance you whant to start or stop(id)/if you want all type all.')
-    parser.add_argument('--choice', choices=['public', 'private'],
-                        help='choice between public and private access.')
+    parser.add_argument('--security', choices=['public', 'private'],
+                        help=' between public and private access.')
     parser.add_argument('--file', '--upload', help='Path to the file you want to upload')
     parser.add_argument('--name', help='give a name for the file/dns record name')
     parser.add_argument('--values', help='Comma-separated values for the DNS record')
@@ -44,16 +44,16 @@ def main():
                 start_ec2_instance(args.instance)
         elif args.action == 'list':
             # List all EC2 instances
-            list_id = list_my_ec2()
-            print(list_id)
+            list_my_ec2()
+            
 
 # S3 resource management
     if args.resource == 's3':
         if args.action == 'create':
-            if not args.choice:
+            if not args.security:
                 # Validate presence of all necessary parameters for s3 bucket creation
-                parser.error("--choice is required for creating s3 bucket")
-            if args.choice == 'public':
+                parser.error("--security is required for creating s3 bucket")
+            if args.security == 'public':
             # Confirm with the user before creating a public S3 bucket
                 sure = input("are you sure?") 
                 if sure == 'yes':

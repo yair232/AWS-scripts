@@ -28,6 +28,8 @@ def create_zone(name, private):
             }
         ]
     )
+    print("i created youre zone", name)
+    return f"Zone '{name}' created successfully with ID '{hosted_zone_id}' and tagged as 'yaircli'."
 
 def get_hosted_zone_id(zone_name):
     client = boto3.client('route53', 'us-east-1')
@@ -44,7 +46,7 @@ def create_dns_record(record_name, record_type, record_values, function, zone_na
     hosted_zone_id = get_hosted_zone_id(zone_name)
     if not hosted_zone_id:
         print("Hosted zone not found.")
-        return
+        return "Hosted zone not found.",400
 
     if isinstance(record_values, str):
         record_values = [value.strip() for value in record_values.split(',')]
@@ -97,7 +99,7 @@ def create_dns_record(record_name, record_type, record_values, function, zone_na
                 break
         else:
             print(f"Error: Record with name '{record_name}' not found in zone '{zone_name}'.")
-            return
+            return f"Error: Record with name '{record_name}' not found in zone '{zone_name}'.",400
 
     elif function == 'delete':
         # Fetch the record list and delete based on matching name
@@ -120,7 +122,7 @@ def create_dns_record(record_name, record_type, record_values, function, zone_na
                 break
         else:
             print(f"Error: Record with name '{record_name}' not found in zone '{zone_name}'.")
-            return
+            return f"Error: Record with name '{record_name}' not found in zone '{zone_name}'.",400
     
     try:
         response = client.change_resource_record_sets(
@@ -128,9 +130,11 @@ def create_dns_record(record_name, record_type, record_values, function, zone_na
             ChangeBatch=change_batch
         )
         print(f"Record {function} successful")
+        return f"Record {function} successful"
     
     except client.exceptions.InvalidChangeBatch as e:
         print(f"Failed to {function} record: {e}")
+        return f"Failed to {function} record: {e}",400
 
 def get_existing_record_by_name(record_name, hosted_zone_id):
     client = boto3.client('route53', 'us-east-1')
