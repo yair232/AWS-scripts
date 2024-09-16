@@ -27,13 +27,10 @@ In this phase, I developed a Python CLI tool that allows developers to:
 - **Create Zones:** Create DNS zones using Route53.
 - **Manage DNS Records:** Create, update, or delete DNS records for zones created through the CLI.
 
-### CLI Requirements
-- **Parameters:** Accept parameters for resource type and action (create, update, delete).
-- **Output:** Provide clear output for success or failure of operations and current resource status.
 
 ## Phase 2: Adding a UI in Jenkins
 In this phase, I integrated the Python CLI tool with Jenkins to provide a user-friendly UI. This phase includes:
-- **Screens/Jobs:** Each resource type and action is implemented as a different Jenkins job or screen.
+- **Screens/Jobs:** Each resource is implemented as a different Jenkins job or screen.
 - **Photos:** Visuals of the Jenkins UI are included to demonstrate the integration.
 
 ## Phase 3: Creating a RESTful API
