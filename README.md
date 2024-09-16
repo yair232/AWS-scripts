@@ -37,9 +37,9 @@ In this phase, I integrated the Python CLI tool with Jenkins to provide a user-f
 
 - **Screens/Jobs:** Each resource is implemented as a different Jenkins job or screen.
 - **Photos:** Visuals of the Jenkins UI are included to demonstrate the integration.
-  ![Alt text](AWS-scripts/platform_engineering/images/ec2.png)
+  ![Alt text](/platform_engineering/images/ec2.png)
 
-![Alt text](AWS-scripts/platform_engineering/images/s3.png)
+![Alt text](/platform_engineering/images/s3.png)
 
 ## Phase 3: Creating a RESTful API
 
