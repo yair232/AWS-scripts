@@ -1,10 +1,11 @@
 import boto3
 import json
-def create_s3(sure):
+def create_s3(sure): # Creates an S3 bucket named 'yaircli' and sets its policy
     s3 = boto3.client('s3', 'us-east-1')
     bucket_name='yaircli'
-    s3.create_bucket(Bucket=bucket_name)
+    s3.create_bucket(Bucket=bucket_name) # Create the bucket
     if sure == 'yes':
+        # Define and apply public read policy
         bucket_policy = {
         "Version": "2012-10-17",
         "Statement": [
@@ -25,7 +26,7 @@ def create_s3(sure):
 
 
     
-def list_my_s3(bucket_name='yaircli'):
+def list_my_s3(bucket_name='yaircli'): # Lists the 'yaircli' bucket if it exists.
     s3 = boto3.client('s3', 'us-east-1')
     response = s3.list_buckets()
     bucket_list = []
@@ -33,9 +34,13 @@ def list_my_s3(bucket_name='yaircli'):
         if bucket['Name'] == bucket_name:
             bucket_list.append(bucket['Name'])
     
-    return bucket_list
+    if(len(bucket_list) != 0):
+        return bucket_list
+    print("there is no bucket to list")
+    return "there is no bucket to list"
 
-def upload(file,object_name):
+
+def upload(file,object_name): #  Uploads a file to the 'yaircli' bucket.
     s3 = boto3.client('s3', 'us-east-1')
     bucket_name = 'yaircli'
     try:

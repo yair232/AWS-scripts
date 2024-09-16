@@ -1,7 +1,7 @@
 import boto3
 import uuid
 
-def create_zone(name, private):
+def create_zone(name, private): # Create the hosted zone
     client = boto3.client('route53', 'us-east-1')
     if name is None:
         name = 'yaircli.com'  # Default to 'yaircli.com
@@ -18,6 +18,7 @@ def create_zone(name, private):
         }
     )
     hosted_zone_id = response['HostedZone']['Id'].split('/')[-1]
+        # Tag the new hosted zone
     tag_response = client.change_tags_for_resource(
         ResourceType='hostedzone',
         ResourceId=hosted_zone_id,
@@ -42,6 +43,7 @@ def get_hosted_zone_id(zone_name):
     return None
 
 def create_dns_record(record_name, record_type, record_values, function, zone_name, ttl=300):
+    ##  Create, update, or delete a DNS record.
     client = boto3.client('route53', 'us-east-1')
     hosted_zone_id = get_hosted_zone_id(zone_name)
     if not hosted_zone_id:
@@ -137,6 +139,7 @@ def create_dns_record(record_name, record_type, record_values, function, zone_na
         return f"Failed to {function} record: {e}",400
 
 def get_existing_record_by_name(record_name, hosted_zone_id):
+    ## Get an existing DNS record by name.
     client = boto3.client('route53', 'us-east-1')
     response = client.list_resource_record_sets(HostedZoneId=hosted_zone_id)
     
@@ -148,6 +151,7 @@ def get_existing_record_by_name(record_name, hosted_zone_id):
     return None
 
 def list_hosted_zones_with_comment():
+    ## List hosted zones with a specific tag.
     target_key = 'name'
     target_value = 'yaircli'
     client = boto3.client('route53', 'us-east-1')
@@ -180,4 +184,9 @@ def list_hosted_zones_with_comment():
         except client.exceptions.ClientError as e:
             print(f"Error fetching tags for hosted zone {hosted_zone_id}: {e}")
 
-    return tagged_zones
+    if(len(tagged_zones) != 0):
+        return tagged_zones
+    print("no zones to list")
+    return "no host to list"
+
+    
