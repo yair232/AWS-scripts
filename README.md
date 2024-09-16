@@ -51,4 +51,7 @@ For advanced functionality, I wrapped the CLI tool with a RESTful API to enable 
 
 - **Dependencies:** Ensure you have Python and the necessary libraries installed.
 - **Setup:** Follow instructions in the setup guide to configure your environment.
-- **Usage:** Refer to the CLI and API documentation for detailed usage instructions.
+
+## Usage Instructions
+
+For detailed usage instructions, including CLI commands and API endpoints, refer to the [Usage Documentation](USAGE.md).

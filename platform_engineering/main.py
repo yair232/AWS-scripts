@@ -76,9 +76,9 @@ def main():
     if args.resource == 'route53':
         if args.action == 'create':
             # Validate presence of choice parameter for creating Route53 zone
-            if not args.choice:
-                parser.error("--choice is required for creating route53")
-            if args.choice == 'public':
+            if not args.security:
+                parser.error("--security is required for creating route53")
+            if args.security == 'public':
                 create_zone(args.name,private=False,)
             else:
                 create_zone(args.name,private=True)
