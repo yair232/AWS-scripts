@@ -17,7 +17,6 @@ The CLI tool allows you to manage AWS resources (EC2, S3, Route 53) via simple c
     python main.py --resource ec2 --action list
     ```
   - **Manage EC2 Instances**:
-    - **Start EC2 Instance**:
       ```bash
       python main.py --resource ec2 --action manage --status start/stop --instance i-0abcdef1234567890/ all
       ```
