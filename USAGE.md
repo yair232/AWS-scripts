@@ -4,49 +4,23 @@
 
 The CLI tool allows you to manage AWS resources (EC2, S3, Route 53) via simple commands. Below are examples of how to use the tool for different resources.
 
-### Docker Usage
-
-To use the CLI tool via Docker, you can run the following commands:
-
-### Docker Usage
-
-You can run the CLI tool and API in Docker containers. To integrate with AWS, you need to mount your AWS credentials into the container.
-
-#### Mounting AWS Credentials
-
-- **Linux/Mac**: The AWS credentials are typically located at `~/.aws/`. You need to mount this directory to the Docker container.
-- **Windows**: The AWS credentials are usually located at `C:\Users\<YourUsername>\.aws\`. You need to adjust the path accordingly when mounting.
-
-#### Running Docker Containers
-
-1. **Run CLI Tool Container**:
-
-   ```bash
-   docker run -v ~/.aws:/root/.aws yair23/python-aws-cli
-   ```
-
-#### Example Docker Commands
-
-- **Create EC2 Instance Using Docker**:
-  ```bash
-  docker run -v ~/.aws:/root/.aws yair23/python-aws-cli --resource ec2 --action create --type t2.nano --ami ubuntu
-  ```
-
-#### Available Commands
-
 - **EC2 Instances**:
 
   - **Create EC2 Instance**:
+
     ```bash
     python main.py --resource ec2 --action create --instance_type t2.nano/t4g.nano --ami ubuntu/amazon
     ```
+
   - **List EC2 Instances**:
+
     ```bash
     python main.py --resource ec2 --action list
     ```
+
   - **Manage EC2 Instances**:
     ```bash
-    python main.py --resource ec2 --action manage --status start/stop --instance i-0abcdef1234567890/ all
+    python main.py --resource ec2 --action manage --status start/stop --instance i-0abcdef1234567890/all
     ```
 
 - **S3 Buckets**:
@@ -79,18 +53,21 @@ You can run the CLI tool and API in Docker containers. To integrate with AWS, yo
   - **Manage DNS Records**:
 
     - **Create DNS Record**:
+
       ```bash
-      python main.py --resource route53 --action manage --function create --zone_name example.com --name www.example.com --type A --values 192.168.1.1 --ttl 'int'
+      python main.py --resource route53 --action manage --function create --zone_name example.com --name www.example.com --type A --values 192.168.1.1 --ttl 300
       ```
+
     - **Update DNS Record**:
+
       ```bash
-      python main.py --resource route53 --action manage --function update must -(zone_name,name)
-      --ttl/values/type - at least one for change
+      python main.py --resource route53 --action manage --function update --zone_name example.com --name www.example.com --ttl 300 --values 192.168.1.2 --type A
       ```
+
     - **Delete DNS Record**:
 
       ```bash
-      python main.py --resource route53 --action manage --zone_name example.com --name www.example.com
+      python main.py --resource route53 --action manage --zone_name example.com --name www.example.com --function delete
       ```
 
     - **List DNS Records**:
@@ -102,6 +79,22 @@ You can run the CLI tool and API in Docker containers. To integrate with AWS, yo
 
 - `--resource`: The AWS resource to manage (ec2, s3, route53)
 - `--action`: Action to perform (create, list, upload, start, stop, create_record, update_record, delete_record, list_records, etc.)
+
+### Docker Usage
+
+To use the CLI tool via Docker, you can run the following commands. You can run the CLI tool and API in Docker containers. To integrate with AWS, you need to mount your AWS credentials into the container.
+
+#### Mounting AWS Credentials
+
+- **Linux/Mac**: The AWS credentials are typically located at `~/.aws/`. You need to mount this directory to the Docker container.
+- **Windows**: The AWS credentials are usually located at `C:\Users\<YourUsername>\.aws\`. You need to adjust the path accordingly when mounting.
+
+#### Running Docker Containers
+
+1. **Run CLI Tool Container**:
+   ```bash
+   docker run -v ~/.aws:/root/.aws yair23/python-aws-cli
+   ```
 
 ### API Usage
 
