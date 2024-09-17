@@ -1,4 +1,0 @@
-instance-type:t2.micro
-key-name:Yairkeypem
-image-id:ami-03972092c42e8c0ca
-security-group:sg-0ad32b1d1e25428d2
