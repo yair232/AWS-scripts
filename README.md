@@ -71,14 +71,13 @@ This image contains the RESTful API for interacting with the CLI tool programmat
 
 ```bash
 docker run -d -p 2310:2310 -v C:\Users\<YourUsername>\.aws\ yair23/flask-aws-app:latest
-
+```
 
 ## Installation and Usage
 
 - **Dependencies:** Ensure you have Python and the necessary libraries installed.
-- **Setup:** Follow instructions in the setup guide to configure your environment.
 
 ## Usage Instructions
 
 For detailed usage instructions, including CLI commands and API endpoints, refer to the [Usage Documentation](USAGE.md).
-```
+
