@@ -8,8 +8,6 @@ The CLI tool allows you to manage AWS resources (EC2, S3, Route 53) via simple c
 
 To use the CLI tool via Docker, you can run the following commands:
 
--## Usage Instructions
-
 ### Docker Usage
 
 You can run the CLI tool and API in Docker containers. To integrate with AWS, you need to mount your AWS credentials into the container.
