@@ -75,6 +75,22 @@ The CLI tool allows you to manage AWS resources (EC2, S3, Route 53) via simple c
       python main.py --resource route53 --action list
       ```
 
+### Docker Usage
+
+To use the CLI tool via Docker, you can run the following commands. You can run the CLI tool and API in Docker containers. To integrate with AWS, you need to mount your AWS credentials into the container.
+
+#### Mounting AWS Credentials
+
+- **Linux/Mac**: The AWS credentials are typically located at `~/.aws/`. You need to mount this directory to the Docker container.
+- **Windows**: The AWS credentials are usually located at `C:\Users\<YourUsername>\.aws\`. You need to adjust the path accordingly when mounting.
+
+#### Running Docker Containers
+
+1. **Run CLI Tool Container**:
+   ```bash
+   docker run -v ~/.aws:/root/.aws yair23/python-aws-cli
+   ```
+
 #### Additional Arguments
 
 - `--resource`: The AWS resource to manage (ec2, s3, route53)
