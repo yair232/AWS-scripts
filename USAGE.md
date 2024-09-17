@@ -7,6 +7,7 @@ The CLI tool allows you to manage AWS resources (EC2, S3, Route 53) via simple c
 #### Available Commands
 
 - **EC2 Instances**:
+
   - **Create EC2 Instance**:
     ```bash
     python main.py --resource ec2 --action create --instance_type t2.nano/t4g.nano --ami ubuntu/amazon
@@ -20,16 +21,21 @@ The CLI tool allows you to manage AWS resources (EC2, S3, Route 53) via simple c
       ```bash
       python main.py --resource ec2 --action manage --status start/stop --instance i-0abcdef1234567890/ all
       ```
+
 - **S3 Buckets**:
 
   - **Create S3 Bucket**:
+
     ```bash
     python main.py --resource s3 --action create --security private/public
     ```
+
   - **Upload File to S3**:
+
     ```bash
     python main.py --resource s3 --action manage --file folder/myfile.txt --name myfile.txt
     ```
+
   - **List S3 Buckets**:
     ```bash
     python main.py --resource s3 --action list
@@ -44,19 +50,22 @@ The CLI tool allows you to manage AWS resources (EC2, S3, Route 53) via simple c
     ```
 
   - **Manage DNS Records**:
+
     - **Create DNS Record**:
       ```bash
       python main.py --resource route53 --action manage --function create --zone_name example.com --name www.example.com --type A --values 192.168.1.1 --ttl 'int'
       ```
     - **Update DNS Record**:
       ```bash
-       python main.py --resource route53 --action manage --function update must -(zone_name,name)
-       --ttl/values/type - at least one for change
+      python main.py --resource route53 --action manage --function update must -(zone_name,name)
+      --ttl/values/type - at least one for change
       ```
     - **Delete DNS Record**:
+
       ```bash
       python main.py --resource route53 --action manage --zone_name example.com --name www.example.com
       ```
+
     - **List DNS Records**:
       ```bash
       python main.py --resource route53 --action list
@@ -108,7 +117,6 @@ The API provides programmatic access to the same AWS resource management functio
 
     ```json
     {
-      "bucket_name": "mybucket", // Example: "mybucket"
       "access": "private/public" // Example: "public"
     }
     ```
@@ -118,7 +126,7 @@ The API provides programmatic access to the same AWS resource management functio
 
     ```json
     {
-      "file": "C:\\Users\\Yair\\Desktop\\nitzanim\\AWS-scripts\\platform_engineering\\main.py", // Example: "path/to/file"
+      "file": "xxxx\\xxxx\\xxxx\\xxxx\\xxxx\\xxxx\\XXXX\\main.py", // Example: "path/to/file"
       "object_name": "nitzanim" // Example: "myfile.txt"
     }
     ```
@@ -195,3 +203,11 @@ Here are some examples of how to use the API with `Invoke-RestMethod`:
   ```powershell
   Invoke-RestMethod -Uri "http://127.0.0.1:2310/route53?create" -Method Post -Body '{"zone_name":"yaircli232.com","security":"private"}' -ContentType 'application/json'
   ```
+
+  ````linux/mac
+  curl -X POST "http://127.0.0.1:2310/route53?create" \
+  -H "Content-Type: application/json" \
+  -d '{"zone_name":"yaircli232.com","security":"private"}'
+   ```
+
+  ````
