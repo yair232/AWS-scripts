@@ -1,7 +1,5 @@
 from flask import Flask, request, jsonify
-import subprocess
-import sys
-from platform_engineering import *
+from __init__ import *
 
 app = Flask(__name__)
 @app.route('/ec2', methods=['POST'])
