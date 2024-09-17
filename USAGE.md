@@ -96,22 +96,6 @@ To use the CLI tool via Docker, you can run the following commands. You can run 
    docker run -v ~/.aws:/root/.aws yair23/python-aws-cli
    ```
 
-### Docker Usage
-
-To use the CLI tool via Docker, you can run the following commands. You can run the CLI tool and API in Docker containers. To integrate with AWS, you need to mount your AWS credentials into the container.
-
-#### Mounting AWS Credentials
-
-- **Linux/Mac**: The AWS credentials are typically located at `~/.aws/`. You need to mount this directory to the Docker container.
-- **Windows**: The AWS credentials are usually located at `C:\Users\<YourUsername>\.aws\`. You need to adjust the path accordingly when mounting.
-
-#### Running Docker Containers
-
-1. **Run CLI Tool Container**:
-   ```bash
-   docker run -v ~/.aws:/root/.aws yair23/python-aws-cli
-   ```
-
 ### API Usage
 
 The API provides programmatic access to the same AWS resource management functionalities as the CLI.
