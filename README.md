@@ -49,6 +49,30 @@ For advanced functionality, I wrapped the CLI tool with a RESTful API to enable 
 
 - **Interact Programmatically:** Perform resource management tasks via API calls.
 
+### Docker Images
+
+To simplify deployment, two Docker images are available:
+
+#### 1. CLI Docker Image
+
+This image contains the Python-based CLI tool for managing AWS resources.
+
+- **Docker Hub URL:** `docker pull yair23/python-aws-cli:latest`
+
+#### 2. API Docker Image
+
+This image contains the RESTful API for interacting with the CLI tool programmatically.
+
+- **Docker Hub URL:** `docker pull yair23/flask-aws-app:latest`
+
+### Running the Docker Images
+
+**To run the CLI Docker container:**
+
+```bash
+docker run -d -p 2310:2310 -v C:\Users\<YourUsername>\.aws\ yair23/flask-aws-app:latest
+
+
 ## Installation and Usage
 
 - **Dependencies:** Ensure you have Python and the necessary libraries installed.
@@ -57,3 +81,4 @@ For advanced functionality, I wrapped the CLI tool with a RESTful API to enable 
 ## Usage Instructions
 
 For detailed usage instructions, including CLI commands and API endpoints, refer to the [Usage Documentation](USAGE.md).
+```
