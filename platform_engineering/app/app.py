@@ -33,4 +33,4 @@ def route53(): # Handles POST requests for Route 53 actions.
 
 
 if __name__ == '__main__':
-    app.run(port=2310,host="127.0.0.1",debug=True)
+    app.run(port=2310,host="0.0.0.0",debug=True)

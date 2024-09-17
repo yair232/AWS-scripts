@@ -1,6 +1,6 @@
-from ec2_manegment import *
-from s3_manegment import *
-from route53_manegment import *
+from CLI.ec2_manegment import *
+from CLI.s3_manegment import *
+from CLI.route53_manegment import *
 ## ec2
 def action_ec2(request):
     if 'list' in request.args:
